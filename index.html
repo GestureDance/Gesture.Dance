@@ -1,283 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Gesture.Dance — VR Gesture Dance Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Font & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    integrity="sha512-GZcWFwk8Lw0B6Y0nHftep1KXr/Ll5eEeuwrgIsncy0HrFX2e1x0XBsVbMTAQZQHqKWp1vXf9rvVBz2qa9Aqk6w=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-  <link rel="stylesheet" href="styles.css" />
-    <!-- Favicon & app icons -->
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
-</head>
-<body>
-  <div class="page">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Gesture.Dance — VR Gesture Dance Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- HERO / VIDEO BANNER -->
-    <section class="hero" id="top">
-      <div class="hero-inner">
-        <header class="top-bar">
-          <div class="brand">
-            <div class="brand-mark">
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-GZcWFwk8Lw0B6Y0nHftep1KXr/Ll5eEeuwrgIsncy0HrFX2e1x0XBsVbMTAQZQHqKWp1vXf9rvVBz2qa9Aqk6w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Favicons (可根据你的实际路径调整) -->
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <!-- 固定顶部导航 -->
+      <header class="site-header">
+        <div class="header-inner">
+          <a href="#top" class="brand">
+            <span class="brand-mark">
+              <!-- 使用你的 icon.jpg -->
               <img src="icon.jpg" alt="Gesture.Dance logo" />
-            </div>
-            <span class="brand-name">GESTURE.DANCE</span>
-          </div>
-          <div class="top-meta">
-            <span class="top-tagline">VR HAND-GESTURE RHYTHM</span>
-          </div>
-        </header>
+            </span>
+            <span class="brand-text">GESTURE.DANCE</span>
+          </a>
 
-        <div class="hero-video-banner">
-          <div class="hero-video-frame">
-            <!-- Replace VIDEO_ID_HERE with your actual YouTube video ID -->
-            <iframe
-              src="https://www.youtube.com/embed/oFSb-mbXZOQ?autoplay=1&mute=1&controls=0&loop=1&playlist=oFSb-mbXZOQ&modestbranding=1&rel=0"
-              title="Gesture.Dance Trailer"
-              allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            ></iframe>
+          <nav class="nav">
+            <a href="#highlights">Highlights</a>
+            <a href="#team">Team</a>
+            <!-- <a href="#follow">Follow</a> -->
+          </nav>
+        </div>
+      </header>
 
-
-            <div class="hero-overlay">
-              <div class="overlay-main">
-                <div class="overlay-kicker">VR GESTURE DANCE</div>
-                <h1>Dance with your hands,<br />draw with your motion.</h1>
-                <p>
-                  Gesture.Dance is a VR rhythm experiment where every sweep, flick, and curve of your hands
-                  becomes choreography, streaks of light, and responsive sound in 360° space.
-                </p>
+      <main>
+        <!-- HERO + TEASER VIDEO -->
+        <section class="hero" id="top">
+          <div class="hero-inner">
+            <div class="hero-copy reveal">
+              <p class="hero-kicker">VR HAND-GESTURE DANCE</p>
+              <h1>Dance With Your Hands</h1>
+              <p class="hero-text">
+                Gesture.Dance is an immersive VR rhythm game where flying
+                hand-icons guide your movements. Match gestures, flow through
+                gesture chains, and watch your hands naturally form a beautiful
+                hand-dance in real time.
+              </p>
+              <div class="hero-meta">
+                <span class="meta-dot"></span>
+                <span>In development · Not yet released</span>
               </div>
-              <div class="overlay-side">
-                <div class="overlay-label">
-                  <span class="label-dot"></span>
-                  <span>Prototype footage · Autoplays muted</span>
+            </div>
+
+            <div class="hero-video-wrapper reveal">
+              <div class="hero-video-frame">
+                <div class="aspect-16-9">
+                  <!-- 替换为你的 YouTube 视频 ID，这里示例用 oFSb-mbXZOQ -->
+                  <iframe
+                    src="https://www.youtube.com/embed/kjqxx041240?autoplay=1&mute=1&controls=0&loop=1&rel=0"
+                    title="Gesture.Dance Trailer"
+                    allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></iframe>
                 </div>
-                <div class="overlay-note">
-                  Hand-tracked dancing<br />
-                  Designed for short, focused sessions.
+              </div>
+              <div class="hero-video-note">
+                <span class="hero-line"></span>
+                <span
+                  >Official Selection of the 17th Golden Dolphin Awards
+                  2025</span
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- GAMEPLAY HIGHLIGHTS -->
+        <section class="section section-highlights" id="highlights">
+          <div class="section-inner">
+            <header class="section-header reveal">
+              <div class="section-label">
+                <span class="label-bar"></span>
+                <span>GAMEPLAY HIGHLIGHTS</span>
+              </div>
+              <h2>What makes Gesture.Dance unique</h2>
+              <p>
+                A VR hand-gesture rhythm experience with gesture matching,
+                gesture-dance combos, a Chinese-style music library, and
+                built-in recording for creating your own tracks.
+              </p>
+            </header>
+
+            <ol class="highlight-list">
+              <li
+                class="highlight-item highlight-with-image image-right reveal"
+              >
+                <div class="highlight-index">01</div>
+                <div class="highlight-content">
+                  <h3>Core Gameplay: Dance Through Your Gestures</h3>
+                  <p>
+                    Step into an immersive Chinese-style VR world where a
+                    distant dancer guides your moves. Various hand-shaped icons
+                    will fly toward you, and you simply match each one with the
+                    correct hand gesture to clear it. Sometimes they appear one
+                    by one, sometimes as flowing gesture chains that you must
+                    follow smoothly. Avoid incoming bombs, match the gestures,
+                    and as you do so, you naturally perform the full
+                    gesture-dance without needing to consciously mimic the
+                    dancer—your actions become the choreography.
+                  </p>
                 </div>
+
+                <div class="highlight-image">
+                  <img
+                    src="img/game_play/game_play.png"
+                    alt="Gameplay illustration"
+                  />
+                </div>
+              </li>
+
+              <li class="highlight-item highlight-with-image image-left reveal">
+                <div class="highlight-index">02</div>
+                <div class="highlight-content">
+                  <h3>A Variety of Gestures, Endless Combinations</h3>
+                  <p>
+                    The game features multiple distinct hand gestures—each
+                    visually expressive and responsive in VR. These gestures can
+                    be combined in countless sequences, creating dynamic,
+                    visually rich gesture-dances. Every pattern you perform
+                    becomes part of the performance, turning simple hand
+                    recognition into a creative movement experience.
+                  </p>
+                </div>
+
+                <div class="highlight-image">
+                  <img
+                    src="img/game_play/play_with_gestures.png"
+                    alt="Gameplay illustration"
+                  />
+                </div>
+              </li>
+
+              <li
+                class="highlight-item highlight-with-image image-right reveal"
+              >
+                <div class="highlight-index">03</div>
+                <div class="highlight-content">
+                  <h3>A Rich Library of Music</h3>
+                  <p>
+                    Choose from a wide collection of tracks, with a strong focus
+                    on Chinese-style music. From gentle traditional melodies to
+                    energetic modern blends, the diverse music library lets you
+                    enjoy many different atmospheres as you perform your
+                    gesture-dance.
+                  </p>
+                </div>
+
+                <div class="highlight-image">
+                  <img
+                    src="img/game_play/music_selection.png"
+                    alt="Gameplay illustration"
+                  />
+                </div>
+              </li>
+
+              <li class="highlight-item highlight-with-image image-left reveal">
+                <div class="highlight-index">04</div>
+                <div class="highlight-content">
+                  <h3>Record Your Own Gesture-Dance</h3>
+                  <p>
+                    Create your own choreography with our intuitive in-game
+                    recording system. Just perform your gesture-dance in VR,
+                    save it as a playable chart, and share it with others to
+                    enjoy. No external editors or complicated tools—everything
+                    happens seamlessly within the immersive world.
+                  </p>
+                </div>
+
+                <div class="highlight-image">
+                  <img
+                    src="img/game_play/gesture_recording.png"
+                    alt="Gameplay illustration"
+                  />
+                </div>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- TEAM -->
+        <section class="section section-team" id="team">
+          <div class="section-inner">
+            <header class="section-header reveal">
+              <div class="section-label">
+                <span class="label-bar"></span>
+                <span>TEAM</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- GAMEPLAY HIGHLIGHTS -->
-    <section class="section section-highlights" id="highlights">
-      <div class="section-inner">
-        <div class="section-header">
-          <div class="section-label">
-            <span class="section-mark"></span>
-            <span>GAMEPLAY HIGHLIGHTS</span>
-          </div>
-          <h2>Movement first, interface second.</h2>
-          <p>
-            Inspired by rhythm games and contemporary dance, Gesture.Dance focuses on how it feels to move,
-            not how many notes you hit.
-          </p>
-        </div>
-
-        <div class="highlight-list">
-          <!-- Block 1 -->
-          <article class="highlight-block reveal-on-scroll">
-            <div class="highlight-text">
-              <h3>Gesture-first Dancing</h3>
+              <h2>The Team</h2>
               <p>
-                No step charts, no strict lanes. The game reads your hands in real time and transforms your
-                gestures into responsive visual patterns. You improvise; the system follows, encouraging
-                flow rather than perfection.
+                A small three-member team combining art, interaction design, and
+                development.
               </p>
-            </div>
-            <div class="highlight-image">
-              <div class="img-placeholder">
-                <span>In-game mockup<br />Real-time gesture trails</span>
-              </div>
-            </div>
-          </article>
+            </header>
 
-          <!-- Block 2 -->
-          <article class="highlight-block highlight-reverse reveal-on-scroll">
-            <div class="highlight-text">
-              <h3>Space as Instrument</h3>
-              <p>
-                The room around you reacts like an instrument. Sweep upward to lift the scene, cut across to
-                slice through lines of light, and spin to bloom patterns at the edge of your play space.
-              </p>
-            </div>
-            <div class="highlight-image">
-              <div class="img-placeholder">
-                <span>Environment sketch<br />Responsive VR stage</span>
-              </div>
-            </div>
-          </article>
+            <div class="team-grid">
+              <!-- Ruoqin -->
+              <article class="team-card reveal">
+                <a
+                  href="https://example.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="team-img-link"
+                >
+                  <img
+                    src="img/profile_rakey.jpg"
+                    alt="Ruoqin 'Rakey' Yang"
+                    class="team-avatar"
+                  />
+                </a>
+                <a
+                  href="https://example.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="team-name"
+                >
+                  Ruoqin “Rakey” Yang
+                </a>
+                <p class="team-role">Art &amp; 3D Design</p>
+                <p class="team-school">University of Birmingham</p>
+              </article>
 
-          <!-- Block 3 -->
-          <article class="highlight-block reveal-on-scroll">
-            <div class="highlight-text">
-              <h3>Comfortable Short Sessions</h3>
-              <p>
-                Built around 5–10 minute sessions that fit easily into your day. Clear feedback, restrained
-                UI, and gentle pacing let you explore movement without overwhelming visuals or long menus.
-              </p>
-            </div>
-            <div class="highlight-image">
-              <div class="img-placeholder">
-                <span>Session flow<br />From warm-up to freestyle</span>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
+              <!-- Yuzheng -->
+              <article class="team-card reveal">
+                <a
+                  href="https://yuzheng-chen.github.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="team-img-link"
+                >
+                  <img
+                    src="img/profile_yuzheng.jpg"
+                    alt="Yuzheng Chen"
+                    class="team-avatar"
+                  />
+                </a>
+                <a
+                  href="https://yuzheng-chen.github.io/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="team-name"
+                >
+                  Yuzheng Chen
+                </a>
+                <p class="team-role">Unity Developer</p>
+                <p class="team-school">Lancaster University</p>
+              </article>
 
-    <!-- TEAM -->
-    <section class="section section-team" id="team">
-      <div class="section-inner">
-        <div class="section-header">
-          <div class="section-label">
-            <span class="section-mark"></span>
-            <span>TEAM</span>
-          </div>
-          <h2>Three minds, one shared stage.</h2>
-          <p>
-            Gesture.Dance is created by a small team combining visual art, technical design, and game direction.
-          </p>
-        </div>
-
-        <div class="team-grid">
-          <!-- Ruoqin -->
-          <article class="team-card reveal-on-scroll">
-            <a
-              href="https://example.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="team-avatar-link"
-            >
-              <img
-                src="https://via.placeholder.com/260x260.png?text=Rakey"
-                alt="Portrait of Ruoqin 'Rakey' Yang"
-                class="team-avatar"
-              />
-            </a>
-            <a
-              href="https://example.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="team-name"
-            >
-              Ruoqin “Rakey” Yang
-            </a>
-            <p class="team-role">Art & 3D Design</p>
-            <p class="team-school">University of Birmingham</p>
-          </article>
-
-          <!-- Yuzheng -->
-          <article class="team-card reveal-on-scroll">
-            <a
-              href="https://example.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="team-avatar-link"
-            >
-              <img
-                src="https://via.placeholder.com/260x260.png?text=Yuzheng"
-                alt="Portrait of Yuzheng Chen"
-                class="team-avatar"
-              />
-            </a>
-            <a
-              href="https://example.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="team-name"
-            >
-              Yuzheng Chen
-            </a>
-            <p class="team-role">Unity Developer</p>
-            <p class="team-school">Lancaster University</p>
-          </article>
-
-          <!-- Shan -->
-          <article class="team-card reveal-on-scroll">
-            <a
-              href="https://example.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="team-avatar-link"
-            >
-              <img
-                src="https://via.placeholder.com/260x260.png?text=Shan"
-                alt="Portrait of Shan Jin"
-                class="team-avatar"
-              />
-            </a>
-            <a
-              href="https://example.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="team-name"
-            >
-              Shan Jin
-            </a>
-            <p class="team-role">Game & Product Designer</p>
-            <p class="team-school">University of Cambridge</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-inner">
-        <div class="footer-top">
-          <div class="footer-brand">
-            <span class="footer-mark"></span>
-            <span class="footer-title">Gesture.Dance</span>
-          </div>
-          <div class="footer-follow">
-            <span>Follow us</span>
-            <div class="footer-icons">
-              <a href="#" aria-label="Discord">
-                <i class="fa-brands fa-discord"></i>
-              </a>
-              <a href="#" aria-label="Twitter / X">
-                <i class="fa-brands fa-x-twitter"></i>
-              </a>
-              <a href="#" aria-label="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-              </a>
-              <a href="#" aria-label="YouTube">
-                <i class="fa-brands fa-youtube"></i>
-              </a>
+              <!-- Shan -->
+              <article class="team-card reveal">
+                <a
+                  href="https://example.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="team-img-link"
+                >
+                  <img
+                    src="img/profile_shan.jpg"
+                    alt="Shan Jin"
+                    class="team-avatar"
+                  />
+                </a>
+                <a
+                  href="https://example.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="team-name"
+                >
+                  Shan Jin
+                </a>
+                <p class="team-role">Game &amp; Product Designer</p>
+                <p class="team-school">University of Cambridge</p>
+              </article>
             </div>
           </div>
+        </section>
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="footer" id="follow">
+        <div class="footer-inner">
+          <!-- <div class="footer-top">
+            <div class="footer-brand">
+              <span class="footer-mark"></span>
+              <span class="footer-title">Gesture.Dance</span>
+            </div>
+
+            <div class="footer-follow">
+              <span>Follow us</span>
+              <div class="footer-icons">
+                <a href="#" aria-label="Discord">
+                  <i class="fa-brands fa-discord"></i>
+                </a>
+                <a href="#" aria-label="Twitter / X">
+                  <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="#" aria-label="Instagram">
+                  <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="#" aria-label="YouTube">
+                  <i class="fa-brands fa-youtube"></i>
+                </a>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="footer-bottom">
+            <span
+              >Copyright &copy; 2025 Gesture.Dance Team. All rights
+              reserved.</span
+            >
+          </div>
         </div>
+      </footer>
+    </div>
 
-        <div class="footer-meta">
-          <span>Gesture.Dance is currently in development and not yet released.</span>
-          <span>Copyright &copy; 2025 Gesture.Dance Team. All rights reserved.</span>
-        </div>
-      </div>
-    </footer>
-
-  </div>
-
-  <script src="script.js"></script>
-</body>
+    <script src="script.js"></script>
+  </body>
 </html>

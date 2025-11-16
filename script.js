@@ -1,6 +1,6 @@
-// Simple scroll reveal for highlight blocks and team cards
+// 简单滚动 reveal：给 .reveal 元素做淡入上浮
 (function () {
-  const elements = document.querySelectorAll(".reveal-on-scroll");
+  const elements = document.querySelectorAll(".reveal");
 
   if (!("IntersectionObserver" in window) || elements.length === 0) {
     elements.forEach((el) => el.classList.add("visible"));
@@ -16,9 +16,7 @@
         }
       });
     },
-    {
-      threshold: 0.2
-    }
+    { threshold: 0.2 }
   );
 
   elements.forEach((el) => observer.observe(el));
