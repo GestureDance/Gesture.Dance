@@ -5,127 +5,614 @@
     <title>Gesture.Dance — VR Gesture Dance Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Fonts & Icons -->
+    <!-- 载入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 载入 中文字体：思源宋体 (Noto Serif SC) - 用于正文 -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <!-- NEW: 载入 水墨手写字体：马山正 (Ma Shan Zheng) - 用于标题 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- 载入 Font Awesome 图标库 -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-GZcWFwk8Lw0B6Y0nHftep1KXr/Ll5eEeuwrgIsncy0HrFX2e1x0XBsVbMTAQZQHqKWp1vXf9rvVBz2qa9Aqk6w=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
 
-    <!-- Favicons (可根据你的实际路径调整) -->
-    <link rel="icon" href="favicon.ico" sizes="any" />
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
+    <!-- 自定义中国风样式和变量 -->
+    <style>
+      /* Chinese Style Variables (中国风主题变量) */
+      :root {
+        --color-paper: #f8f4e9; /* 宣纸白/米白 */
+        --color-ink: #1e1e1e; /* 墨黑 */
+        --color-cinnabar: #a02c2c; /* 朱砂红 */
+        --color-gold-border: #c79233; /* 描金边 */
+        --color-subtle-line: #e2dcca; /* 淡墨线 */
+        --font-primary: "Noto Serif SC", serif;
+        --font-ink: "Ma Shan Zheng", cursive; /* NEW: 水墨手写字体 */
+        --page-width: 1040px;
+      }
 
-    <link rel="stylesheet" href="styles.css" />
+      /* 通用样式与中文排版优化 */
+      body {
+        font-family: var(--font-primary);
+        color: var(--color-ink);
+        line-height: 1.8; /* 调整行高以适应中文排版 */
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      /* 宣纸粗糙感模拟：在整个页面背景上添加细微的噪点纹理 */
+      .page {
+        background-color: var(--color-paper);
+        position: relative;
+        min-height: 100vh;
+      }
+
+      .page::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+            rgba(0, 0, 0, 0.06) 1px,
+            transparent 1px
+          ),
+          radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        background-size: 5px 5px, 7px 7px;
+        opacity: 0.5;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      /* 创意交互：文本选中样式（使用朱砂红） */
+      ::selection {
+        background-color: rgba(160, 44, 44, 0.2); /* 半透明朱砂红 */
+        color: var(--color-ink);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        font-weight: 600; /* 加粗标题 */
+        line-height: 1.5;
+      }
+
+      /* NEW: 水墨手写标题样式 */
+      .ink-title {
+        font-family: var(--font-ink);
+        font-weight: 400; /* 手写字体不需要加粗 */
+      }
+
+      .brand-text,
+      .section-label,
+      .hero-kicker {
+        /* 确保字母和数字部分仍有清晰的间距和风格 */
+        font-family: "Inter", system-ui, sans-serif;
+        letter-spacing: 0.25em;
+      }
+
+      /* NEW: 突出显示序号 01, 02, 03, 04 */
+      .highlight-index {
+        font-family: var(--font-ink); /* 应用水墨字体 */
+        font-size: 2.5rem; /* 增大字体 */
+        line-height: 1;
+        color: #bfbfbf !important;
+      }
+
+      /* 全局无圆角，保持方正古朴 */
+      *,
+      *::before,
+      *::after {
+        border-radius: 0 !important;
+      }
+
+      /* 头部导航：卷轴效果 */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        /* 使用纯色背景覆盖宣纸纹理，确保导航清晰 */
+        background-color: rgba(248, 244, 233, 0.96); /* 半透明米白 */
+        backdrop-filter: blur(4px);
+        border-bottom: 2px solid var(--color-subtle-line);
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .nav a {
+        position: relative;
+        padding: 2px 0;
+        transition: color 0.3s;
+        letter-spacing: 0.2em; /* 增大字间距 */
+        color: var(--color-ink);
+        text-decoration: none;
+      }
+
+      .nav a:hover {
+        color: var(--color-cinnabar);
+      }
+
+      /* 导航链接悬停效果：回归传统下划线/边框 */
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px; /* 调整位置 */
+        width: 0;
+        height: 2px; /* 细线 */
+        background-color: var(--color-cinnabar);
+        transition: width 0.3s ease-out; /* 宽度变化 */
+      }
+
+      .nav a:hover::after {
+        width: 100%; /* 悬停时从左到右划出下划线 */
+      }
+
+      /* HERO 创意设计：水墨边框 */
+      .hero-section {
+        background-color: transparent; /* 保持透明，露出宣纸纹理 */
+        padding: 40px 20px 64px;
+      }
+
+      .hero-inner {
+        max-width: var(--page-width);
+        margin-left: auto;
+        margin-right: auto;
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+        gap: 40px;
+        align-items: center;
+
+        /* 边框设计：模拟描金或朱砂画框 */
+        border: 4px solid var(--color-subtle-line);
+        box-shadow: 0 0 0 2px var(--color-gold-border);
+        background-color: var(--color-paper); /* 确保内容区域是纯白底 */
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* 创意交互：CTA 按钮水墨波动效果 */
+      .cta-button {
+        position: relative;
+        overflow: hidden;
+        background-color: var(--color-cinnabar);
+        color: var(--color-paper);
+        border: 1px solid var(--color-cinnabar);
+        transition: all 0.3s ease;
+      }
+
+      .cta-button:hover {
+        background-color: var(--color-paper);
+        color: var(--color-cinnabar);
+        box-shadow: 0 0 0 4px rgba(160, 44, 44, 0.4); /* 增加朱砂光晕 */
+      }
+
+      /* 装饰点 */
+      .meta-dot {
+        width: 8px;
+        height: 8px;
+        background-color: var(--color-cinnabar);
+        transform: rotate(45deg); /* 菱形 */
+      }
+
+      .hero-line {
+        height: 2px;
+        background-color: var(--color-cinnabar);
+        animation: hero-line-grow 1.3s ease-out forwards;
+      }
+
+      /* HIGHLIGHTS 创意设计：条目分隔线（水墨笔触/画轴分隔） */
+      .highlight-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .highlight-item {
+        padding: 30px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* 模拟笔触分隔线 */
+      .highlight-item:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        /* 虚线效果，模拟淡墨勾勒 */
+        background: repeating-linear-gradient(
+          to right,
+          var(--color-subtle-line),
+          var(--color-subtle-line) 2px,
+          transparent 2px,
+          transparent 8px
+        );
+      }
+
+      .highlight-image img,
+      .team-avatar {
+        border: 3px solid var(--color-gold-border);
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      /* 创意交互：图片悬停放大 */
+      .highlight-image img:hover {
+        transform: scale(1.02) rotate(-0.5deg);
+        box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.25);
+      }
+
+      /* 队伍卡片：玉佩/印章效果 */
+      .team-card {
+        background-color: var(--color-paper);
+        border: 1px solid var(--color-subtle-line);
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      /* 创意交互：团队卡片悬停效果 */
+      .team-card:hover {
+        box-shadow: 0 6px 15px rgba(160, 44, 44, 0.25);
+        transform: translateY(-3px);
+      }
+
+      .team-avatar {
+        border-radius: 0;
+        object-fit: cover;
+      }
+
+      .team-name {
+        color: var(--color-cinnabar);
+      }
+
+      .team-name::after {
+        background-color: var(--color-gold-border);
+      }
+
+      /* 创意交互：滚动揭示动画改成更柔和的 "浮现" */
+      .reveal {
+        opacity: 0;
+        transform: translateY(15px);
+        transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      }
+
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* 响应式调整 for Highlights Layout */
+      .highlight-with-image {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+      }
+
+      .highlight-with-image .highlight-index {
+        flex: 0 0 60px;
+        text-align: center; /* 序号居中 */
+      }
+
+      .highlight-with-image .highlight-content {
+        flex: 1 1 auto;
+      }
+
+      .highlight-with-image .highlight-image {
+        flex: 0 0 40%;
+        max-width: 40%;
+      }
+
+      .highlight-item,
+      .highlight-with-image,
+      .highlight-image {
+        overflow: visible !important;
+      }
+
+      .image-left .highlight-index {
+        order: 1;
+      }
+      .image-left .highlight-image {
+        order: 2;
+      }
+      .image-left .highlight-content {
+        order: 3;
+      }
+
+      .image-right .highlight-index {
+        order: 1;
+      }
+      .image-right .highlight-content {
+        order: 2;
+      }
+      .image-right .highlight-image {
+        order: 3;
+      }
+
+      /* 手机端：自动纵向排列 */
+      @media (max-width: 920px) {
+        .hero-inner {
+          grid-template-columns: 1fr;
+          padding: 1.5rem 1rem;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .highlight-with-image {
+          flex-direction: column;
+        }
+
+        .highlight-with-image .highlight-image {
+          max-width: 100%;
+          flex: 0 0 auto;
+          order: 3 !important; /* 确保图片在内容下方 */
+        }
+
+        /* 手机端序号依然保留，但简化样式 */
+        .highlight-with-image .highlight-index {
+          order: 1 !important;
+          flex: 0 0 auto;
+          text-align: left;
+          font-size: 1.5rem;
+          margin-bottom: -10px;
+          padding-top: 0;
+        }
+
+        .highlight-with-image .highlight-content {
+          order: 2 !important;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .header-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .team-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-top {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
   </head>
-  <body>
+  <body class="min-h-screen">
     <div class="page">
       <!-- 固定顶部导航 -->
       <header class="site-header">
-        <div class="header-inner">
-          <a href="#top" class="brand">
-            <span class="brand-mark">
+        <div
+          class="header-inner flex justify-between items-center max-w-[--page-width] mx-auto py-3 px-5 sm:px-4"
+        >
+          <a
+            href="#top"
+            class="brand flex items-center gap-2 text-[--color-ink] no-underline"
+          >
+            <span
+              class="brand-mark w-8 h-8 overflow-hidden border border-[--color-subtle-line]"
+            >
               <!-- 使用你的 icon.jpg -->
-              <img src="icon.jpg" alt="Gesture.Dance logo" />
+              <img
+                src="icon.jpg"
+                alt="Gesture.Dance logo"
+                class="w-full h-full object-cover"
+              />
             </span>
-            <span class="brand-text">GESTURE.DANCE</span>
+            <span
+              class="brand-text text-sm font-semibold tracking-[0.18em] uppercase"
+              >GESTURE.DANCE</span
+            >
           </a>
 
-          <nav class="nav">
-            <a href="#highlights">Highlights</a>
-            <a href="#team">Team</a>
-            <!-- <a href="#follow">Follow</a> -->
+          <nav class="nav flex items-center gap-5 text-sm">
+            <!-- 文本还原：核心亮点 -> HIGHLIGHTS -->
+            <a href="#highlights" class="hover:text-[--color-cinnabar]"
+              >HIGHLIGHTS</a
+            >
+            <!-- 文本还原：开发团队 -> TEAM -->
+            <a href="#team" class="hover:text-[--color-cinnabar]">TEAM</a>
+            <!-- <a href="#follow" class="hover:text-[--color-cinnabar]">关注我们</a> -->
           </nav>
         </div>
       </header>
 
       <main>
         <!-- HERO + TEASER VIDEO -->
-        <section class="hero" id="top">
+        <section class="hero-section" id="top">
           <div class="hero-inner">
-            <div class="hero-copy reveal">
-              <p class="hero-kicker">VR HAND-GESTURE DANCE</p>
-              <h1>Dance With Your Hands</h1>
-              <p class="hero-text">
+            <!-- 左侧文案 -->
+            <div class="hero-copy relative reveal">
+              <p
+                class="hero-kicker text-xs text-[--color-ink] mb-2 font-semibold"
+              >
+                VR HAND-GESTURE DANCE
+              </p>
+
+              <!-- NEW: Ink Seal Component (朱砂印章装饰) -->
+              <div
+                class="ink-seal absolute top-0 right-0 p-4 -translate-y-4 translate-x-4 hidden sm:block"
+              >
+                <svg
+                  class="w-12 h-12 text-[--color-cinnabar] opacity-80"
+                  viewBox="0 0 100 100"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <!-- 简单的毛边朱砂印章形状 -->
+                  <rect
+                    x="10"
+                    y="10"
+                    width="80"
+                    height="80"
+                    rx="5"
+                    ry="5"
+                    stroke="currentColor"
+                    stroke-width="5"
+                    fill="none"
+                  />
+                  <text
+                    x="50"
+                    y="47"
+                    font-family="var(--font-primary)"
+                    font-size="28"
+                    font-weight="700"
+                    text-anchor="middle"
+                    fill="currentColor"
+                  >
+                    手
+                  </text>
+                  <text
+                    x="50"
+                    y="77"
+                    font-family="var(--font-primary)"
+                    font-size="28"
+                    font-weight="700"
+                    text-anchor="middle"
+                    fill="currentColor"
+                  >
+                    舞
+                  </text>
+                </svg>
+              </div>
+
+              <!-- 文本还原：手随心动，如戏起舞 -> DANCE OF THE HAND, A RHYTHM IN MOTION -->
+              <h1
+                class="text-3xl sm:text-4xl leading-snug mb-4 text-[--color-ink]"
+              >
+                DANCE OF THE HAND, A RHYTHM IN MOTION
+              </h1>
+              <p class="text-base text-[--color-ink] mb-4">
                 Gesture.Dance is an immersive VR rhythm game where flying
                 hand-icons guide your movements. Match gestures, flow through
                 gesture chains, and watch your hands naturally form a beautiful
                 hand-dance in real time.
               </p>
-              <div class="hero-meta">
+              <div
+                class="hero-meta flex items-center gap-2 text-sm text-[--color-ink] mb-6"
+              >
                 <span class="meta-dot"></span>
-                <span>In development · Not yet released</span>
+                <!-- 文本还原：开发中 · 尚未发布 -> IN DEVELOPMENT · UNRELEASED -->
+                <span>IN DEVELOPMENT · UNRELEASED</span>
               </div>
+
+              <!-- 新增创意交互：CTA 按钮 -->
+              <a
+                href="#"
+                class="cta-button inline-flex items-center justify-center px-6 py-3 text-base font-medium tracking-wider uppercase transition-all duration-300 ease-in-out"
+              >
+                <i class="fa-brands fa-discord mr-3 text-lg"></i>
+                JOIN THE COMMUNITY
+              </a>
+
+              <a
+                class="text-sm mt-2"
+                style="color: rgba(51, 48, 48, 0.6); letter-spacing: 1px"
+              >
+                (coming soon)
+              </a>
             </div>
 
-            <div class="hero-video-wrapper reveal">
-              <div class="hero-video-frame">
-                <div class="aspect-16-9">
-                  <!-- 替换为你的 YouTube 视频 ID，这里示例用 oFSb-mbXZOQ -->
+            <!-- 右侧视频 -->
+            <div class="hero-video-wrapper flex flex-col gap-2 reveal">
+              <div class="border-4 border-[--color-ink] bg-black">
+                <div class="aspect-video relative w-full pt-[56.25%]">
+                  <!-- 替换为你的 YouTube 视频 ID，这里示例用 Ibae_9cbSTo -->
                   <iframe
-                    src="https://www.youtube.com/embed/kjqxx041240?autoplay=1&mute=1&controls=0&loop=1&rel=0"
+                    class="absolute inset-0 w-full h-full"
+                    src="https://www.youtube.com/embed/Ibae_9cbSTo?autoplay=1&mute=1&controls=0&loop=1&rel=0"
                     title="Gesture.Dance Trailer"
                     allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
                   ></iframe>
                 </div>
               </div>
-              <div class="hero-video-note">
-                <span class="hero-line"></span>
-                <span
-                  >Official Selection of the 17th Golden Dolphin Awards
-                  2025</span
-                >
+              <div
+                class="hero-video-note flex items-center gap-2 text-xs text-[--color-ink]"
+              >
+                <span class="hero-line w-10"></span>
+                <!-- 文本还原：第17届金海豚奖 2025 官方入选作品 -> OFFICIAL SELECTION, 17TH GOLDEN DOLPHIN AWARDS 2025 -->
+                <span>OFFICIAL SELECTION, 17TH GOLDEN DOLPHIN AWARDS 2025</span>
               </div>
             </div>
           </div>
         </section>
 
         <!-- GAMEPLAY HIGHLIGHTS -->
-        <section class="section section-highlights" id="highlights">
-          <div class="section-inner">
-            <header class="section-header reveal">
-              <div class="section-label">
-                <span class="label-bar"></span>
-                <span>GAMEPLAY HIGHLIGHTS</span>
-              </div>
-              <h2>What makes Gesture.Dance unique</h2>
-              <p>
-                A VR hand-gesture rhythm experience with gesture matching,
-                gesture-dance combos, a Chinese-style music library, and
-                built-in recording for creating your own tracks.
-              </p>
+        <section class="section py-16 px-5" id="highlights">
+          <div class="section-inner max-w-[--page-width] mx-auto">
+            <!-- UPDATED: 简化并应用水墨字体 -->
+            <header class="section-header mb-12 reveal text-center">
+              <h2
+                class="ink-title text-4xl sm:text-5xl mb-4 text-[--color-ink] leading-none"
+              >
+                Game Play
+              </h2>
             </header>
 
             <ol class="highlight-list">
+              <!-- 亮点 01 -->
               <li
                 class="highlight-item highlight-with-image image-right reveal"
               >
-                <div class="highlight-index">01</div>
+                <div
+                  class="highlight-index hidden md:block text-[--color-cinnabar] leading-none"
+                >
+                  01
+                </div>
+
                 <div class="highlight-content">
-                  <h3>Core Gameplay: Dance Through Your Gestures</h3>
+                  <h3 class="text-lg font-bold mb-1 text-[--color-cinnabar]">
+                    CORE GAMEPLAY: HANDS AS BODY, A DANCE OF RHYTHM
+                  </h3>
+
                   <p>
-                    Step into an immersive Chinese-style VR world where a
-                    distant dancer guides your moves. Various hand-shaped icons
-                    will fly toward you, and you simply match each one with the
-                    correct hand gesture to clear it. Sometimes they appear one
-                    by one, sometimes as flowing gesture chains that you must
-                    follow smoothly. Avoid incoming bombs, match the gestures,
-                    and as you do so, you naturally perform the full
-                    gesture-dance without needing to consciously mimic the
-                    dancer—your actions become the choreography.
+                    <span style="color: rgba(160, 44, 44, 0.85)"
+                      >✨ Step into an immersive Chinese-style VR world</span
+                    >
+                    where a distant dancer guides your moves.
                   </p>
+
+                  <ul class="list-disc ml-5 space-y-1">
+                    <li>
+                      Various
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >hand-shaped icons 🖐️</span
+                      >
+                      fly toward you—match each with the correct gesture.
+                    </li>
+                    <li>
+                      Icons may appear one-by-one or as
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >flowing gesture chains 🌊</span
+                      >
+                      that require smooth continuous motion.
+                    </li>
+                    <li>
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >Avoid bombs 💥</span
+                      >
+                      while performing these gestures, naturally forming
+                      full-body choreography.
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="highlight-image">
@@ -136,18 +623,44 @@
                 </div>
               </li>
 
+              <!-- 亮点 02 -->
               <li class="highlight-item highlight-with-image image-left reveal">
-                <div class="highlight-index">02</div>
+                <div
+                  class="highlight-index hidden md:block text-[--color-cinnabar] leading-none"
+                >
+                  02
+                </div>
+
                 <div class="highlight-content">
-                  <h3>A Variety of Gestures, Endless Combinations</h3>
+                  <h3 class="text-lg font-bold mb-1 text-[--color-cinnabar]">
+                    THOUSANDS OF GESTURES, INFINITE COMBOS
+                  </h3>
+
                   <p>
-                    The game features multiple distinct hand gestures—each
-                    visually expressive and responsive in VR. These gestures can
-                    be combined in countless sequences, creating dynamic,
-                    visually rich gesture-dances. Every pattern you perform
-                    becomes part of the performance, turning simple hand
-                    recognition into a creative movement experience.
+                    The game features
+                    <span style="color: rgba(160, 44, 44, 0.85)"
+                      >many expressive VR hand gestures ✋🤚🫱🫲</span
+                    >, each visually distinctive.
                   </p>
+
+                  <ul class="list-disc ml-5 space-y-1">
+                    <li>
+                      Gestures can be
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >combined in infinite sequences</span
+                      >
+                      to form dynamic routines.
+                    </li>
+                    <li>
+                      Every gesture pattern becomes part of your performance.
+                    </li>
+                    <li>
+                      The system transforms simple recognition into a
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >creative movement experience 🎨</span
+                      >.
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="highlight-image">
@@ -158,19 +671,41 @@
                 </div>
               </li>
 
+              <!-- 亮点 03 -->
               <li
                 class="highlight-item highlight-with-image image-right reveal"
               >
-                <div class="highlight-index">03</div>
+                <div
+                  class="highlight-index hidden md:block text-[--color-cinnabar] leading-none"
+                >
+                  03
+                </div>
+
                 <div class="highlight-content">
-                  <h3>A Rich Library of Music</h3>
+                  <h3 class="text-lg font-bold mb-1 text-[--color-cinnabar]">
+                    VAST MUSIC LIBRARY, CHINESE STYLE FEAST
+                  </h3>
+
                   <p>
-                    Choose from a wide collection of tracks, with a strong focus
-                    on Chinese-style music. From gentle traditional melodies to
-                    energetic modern blends, the diverse music library lets you
-                    enjoy many different atmospheres as you perform your
-                    gesture-dance.
+                    Choose from a
+                    <span style="color: rgba(160, 44, 44, 0.85)"
+                      >wide collection of tracks 🎵</span
+                    >, with a strong emphasis on
+                    <span style="color: rgba(160, 44, 44, 0.85)"
+                      >Chinese-style music</span
+                    >.
                   </p>
+
+                  <ul class="list-disc ml-5 space-y-1">
+                    <li>Gentle traditional melodies.</li>
+                    <li>Energetic modern blends.</li>
+                    <li>
+                      A variety of atmospheres for your
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >gesture-dance 🎶💫</span
+                      >.
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="highlight-image">
@@ -181,17 +716,46 @@
                 </div>
               </li>
 
+              <!-- 亮点 04 -->
               <li class="highlight-item highlight-with-image image-left reveal">
-                <div class="highlight-index">04</div>
+                <div
+                  class="highlight-index hidden md:block text-[--color-cinnabar] leading-none"
+                >
+                  04
+                </div>
+
                 <div class="highlight-content">
-                  <h3>Record Your Own Gesture-Dance</h3>
+                  <h3 class="text-lg font-bold mb-1 text-[--color-cinnabar]">
+                    CREATE YOUR OWN DANCE, REAL-TIME RECORDING
+                  </h3>
+
                   <p>
-                    Create your own choreography with our intuitive in-game
-                    recording system. Just perform your gesture-dance in VR,
-                    save it as a playable chart, and share it with others to
-                    enjoy. No external editors or complicated tools—everything
-                    happens seamlessly within the immersive world.
+                    <span style="color: rgba(160, 44, 44, 0.85)"
+                      >🎬 Create your own choreography</span
+                    >
+                    using the intuitive in-game recording system.
                   </p>
+
+                  <ul class="list-disc ml-5 space-y-1">
+                    <li>Perform your gesture-dance directly in VR.</li>
+                    <li>
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >Save your dance as a playable chart</span
+                      >.
+                    </li>
+                    <li>
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >Share with others</span
+                      >
+                      instantly—no external tools required.
+                    </li>
+                    <li>
+                      Fully integrated into the
+                      <span style="color: rgba(160, 44, 44, 0.85)"
+                        >immersive world 🕶️</span
+                      >.
+                    </li>
+                  </ul>
                 </div>
 
                 <div class="highlight-image">
@@ -206,45 +770,52 @@
         </section>
 
         <!-- TEAM -->
-        <section class="section section-team" id="team">
-          <div class="section-inner">
-            <header class="section-header reveal">
-              <div class="section-label">
-                <span class="label-bar"></span>
-                <span>TEAM</span>
-              </div>
-              <h2>The Team</h2>
-              <p>
-                A small three-member team combining art, interaction design, and
-                development.
-              </p>
+        <section
+          class="section bg-stone-100 py-16 px-5 border-y border-[--color-subtle-line]"
+          id="team"
+        >
+          <div class="section-inner max-w-[--page-width] mx-auto">
+            <!-- UPDATED: 简化并应用水墨字体 -->
+            <header class="section-header mb-12 reveal text-center">
+              <h2
+                class="ink-title text-4xl sm:text-5xl mb-4 text-[--color-ink] leading-none"
+              >
+                The Team
+              </h2>
             </header>
 
-            <div class="team-grid">
+            <div
+              class="team-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
               <!-- Ruoqin -->
               <article class="team-card reveal">
                 <a
                   href="https://example.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="team-img-link"
+                  class="team-img-link block w-full mb-3"
                 >
                   <img
                     src="img/profile_rakey.jpg"
                     alt="Rakey / Ruoqing Yang"
-                    class="team-avatar"
+                    class="team-avatar w-full h-auto"
                   />
                 </a>
                 <a
                   href="https://example.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="team-name"
+                  class="team-name text-lg font-semibold inline-block mb-1 relative no-underline"
                 >
                   Rakey / Ruoqing Yang
                 </a>
-                <p class="team-role">Technical Art & Interaction Design</p>
-                <p class="team-school">University of Nottingham</p>
+                <!-- 文本还原：技术美术 & 交互设计 -> TECH ART & INTERACTION DESIGN -->
+                <p class="team-role text-base m-0 mb-1">
+                  TECH ART & INTERACTION DESIGN
+                </p>
+                <p class="team-school text-sm text-gray-500 m-0">
+                  University of Nottingham
+                </p>
               </article>
 
               <!-- Yuzheng -->
@@ -253,24 +824,27 @@
                   href="https://yuzheng-chen.github.io/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="team-img-link"
+                  class="team-img-link block w-full mb-3"
                 >
                   <img
                     src="img/profile_yuzheng.jpg"
                     alt="Yuzheng Chen"
-                    class="team-avatar"
+                    class="team-avatar w-full h-auto"
                   />
                 </a>
                 <a
                   href="https://yuzheng-chen.github.io/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="team-name"
+                  class="team-name text-lg font-semibold inline-block mb-1 relative no-underline"
                 >
                   Yuzheng Chen
                 </a>
-                <p class="team-role">Unity Developer</p>
-                <p class="team-school">Lancaster University</p>
+                <!-- 文本还原：Unity 开发工程师 -> UNITY DEVELOPER -->
+                <p class="team-role text-base m-0 mb-1">UNITY DEVELOPER</p>
+                <p class="team-school text-sm text-gray-500 m-0">
+                  Lancaster University
+                </p>
               </article>
 
               <!-- Shan -->
@@ -279,24 +853,29 @@
                   href="https://example.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="team-img-link"
+                  class="team-img-link block w-full mb-3"
                 >
                   <img
                     src="img/profile_shan.jpg"
                     alt="Shan Jin"
-                    class="team-avatar"
+                    class="team-avatar w-full h-auto"
                   />
                 </a>
                 <a
                   href="https://example.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="team-name"
+                  class="team-name text-lg font-semibold inline-block mb-1 relative no-underline"
                 >
                   Shan Jin
                 </a>
-                <p class="team-role">Game &amp; Product Designer</p>
-                <p class="team-school">University of Cambridge</p>
+                <!-- 文本还原：游戏 & 产品设计师 -> GAME & PRODUCT DESIGNER -->
+                <p class="team-role text-base m-0 mb-1">
+                  GAME & PRODUCT DESIGNER
+                </p>
+                <p class="team-school text-sm text-gray-500 m-0">
+                  University of Cambridge
+                </p>
               </article>
             </div>
           </div>
@@ -304,32 +883,12 @@
       </main>
 
       <!-- FOOTER -->
-      <footer class="footer" id="follow">
-        <div class="footer-inner">
-          <!-- <div class="footer-top">
-            <div class="footer-brand">
-              <span class="footer-mark"></span>
-              <span class="footer-title">Gesture.Dance</span>
-            </div>
-
-            <div class="footer-follow">
-              <span>Follow us</span>
-              <div class="footer-icons">
-                <a href="#" aria-label="Discord">
-                  <i class="fa-brands fa-discord"></i>
-                </a>
-                <a href="#" aria-label="Twitter / X">
-                  <i class="fa-brands fa-x-twitter"></i>
-                </a>
-                <a href="#" aria-label="Instagram">
-                  <i class="fa-brands fa-instagram"></i>
-                </a>
-                <a href="#" aria-label="YouTube">
-                  <i class="fa-brands fa-youtube"></i>
-                </a>
-              </div>
-            </div>
-          </div> -->
+      <footer class="footer py-6 px-5" id="follow">
+        <div
+          class="footer-inner max-w-[--page-width] mx-auto flex flex-col gap-3 text-sm text-gray-600"
+        >
+          <!-- 顶部被注释掉，保持原样 -->
+          <!-- <div class="footer-top">...</div> -->
 
           <div class="footer-bottom">
             <span
@@ -341,6 +900,87 @@
       </footer>
     </div>
 
-    <script src="script.js"></script>
+    <!-- JavaScript for Scroll Reveal (保持原有逻辑) -->
+    <script>
+      // 简单滚动 reveal：给 .reveal 元素做淡入上浮
+      (function () {
+        const elements = document.querySelectorAll(".reveal");
+
+        if (!("IntersectionObserver" in window) || elements.length === 0) {
+          elements.forEach((el) => el.classList.add("visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              // 创意交互：延迟加载效果，增加卷轴展开的优雅感
+              if (entry.isIntersecting) {
+                const delay = parseInt(
+                  entry.target.getAttribute("data-delay") || "0",
+                  10
+                );
+                setTimeout(() => {
+                  entry.target.classList.add("visible");
+                  observer.unobserve(entry.target);
+                }, delay);
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+
+        elements.forEach((el, index) => {
+          // 为团队卡片和高亮条目添加错位延迟
+          if (el.closest(".team-card") || el.closest(".highlight-item")) {
+            el.setAttribute("data-delay", (index % 3) * 150);
+          }
+          observer.observe(el);
+        });
+      })();
+
+      // 创意交互：视频自动播放控制（避免在滚动时消耗资源）
+      (function () {
+        const videoWrapper = document.querySelector(".hero-video-wrapper");
+
+        // 检查是否有 videoWrapper 元素，以及是否支持 IntersectionObserver
+        if (!videoWrapper || !("IntersectionObserver" in window)) return;
+
+        const videoObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              // 在 videoWrapper 中查找 iframe
+              const iframe = entry.target.querySelector("iframe");
+              if (!iframe) return;
+
+              // 仅在可见时播放，不可见时暂停（通过移除/添加 iframe src 实现）
+              // 注意：iframe src 默认包含 autoplay=1
+              const currentSrc = iframe.src;
+
+              if (entry.isIntersecting) {
+                // 如果当前是暂停状态 (autoplay=0)，则切换到播放 (autoplay=1)
+                if (currentSrc.includes("autoplay=0")) {
+                  // 确保 src 包含 autoplay=1
+                  if (!currentSrc.includes("autoplay=1")) {
+                    iframe.src = currentSrc.replace("autoplay=0", "autoplay=1");
+                  }
+                } else if (!currentSrc.includes("autoplay=1")) {
+                  // 如果没有 autoplay 参数，则添加 autoplay=1
+                  iframe.src = currentSrc + "&autoplay=1";
+                }
+              } else {
+                // 如果当前是播放状态 (autoplay=1)，则切换到暂停 (autoplay=0)
+                if (currentSrc.includes("autoplay=1")) {
+                  iframe.src = currentSrc.replace("autoplay=1", "autoplay=0");
+                }
+              }
+            });
+          },
+          { threshold: 0.5 } // 视频一半可见时开始播放
+        );
+
+        videoObserver.observe(videoWrapper);
+      })();
+    </script>
   </body>
 </html>
